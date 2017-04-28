@@ -1,0 +1,44 @@
+#!/bin/bash 
+
+#TODO:  use getopts
+
+WS="$PWD" #"/root/overlay_ws"
+echo "current directory mapping:"
+echo "$PWD":"$WS"
+
+echo "search for ethernet interface:"
+
+#device="$(ls /sys/class/net | awk '{print $2}')"
+#printf "found device: $device\n\n"
+
+#DNS="$(nmcli device show ${device} | grep IP4.DNS | awk '{print $2}')"
+DNS="$(nmcli device show | grep IP4.DNS | awk 'NR==1{print $2}')"
+echo "found DNS: $DNS"
+
+#docker inspect dockerdev  #to get information about the container
+#docker inspect --format="{{ .State.Status }}" dockerdev
+if [[ "$(docker inspect --format="{{ .State.Status }}" dockerdev 2> /dev/null)" == "exited" ]]; then
+  echo "reuse last docker container!!"
+  docker start -i dockerdev
+  #docker attach dockerdev
+else
+  echo "create new container!!"
+  docker run --privileged -v "$PWD":"$WS" -w "$WS" --dns $DNS -it --name dockerdev gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop /bin/bash -c "byobu"
+  if [ $? -eq 125 ]
+  then
+    echo "dockerdev already running, creating new image...!"
+    docker run --privileged -v "$PWD":"$WS" -w "$WS" --dns $DNS -it gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop /bin/bash -c "byobu"
+  fi
+fi
+
+#TODO: handle multiple docker containers (.State.Status) =="running"
+
+#docker run -v "$PWD":"$WS" -w "$WS" --dns $DNS -it --name dockerdev yeus/ros2
+#TODO try using a dockerfile
+
+#docker create -it --name new-container -v "$PWD":"$WS" -w "$WS" --dns $DNS yeus/ros2
+# start our container.
+#docker start new-container
+
+#TODO start automatically in a sourced ros environment
+#TODO use last used container by default
