@@ -1,0 +1,54 @@
+FROM ros:kinetic
+
+RUN apt-get update && apt-get install -y \
+    ros-kinetic-desktop-full \
+    ros-kinetic-moveit* \
+    ros-kinetic-move-base* \
+    ros-kinetic-frontier-exploration \
+    libserial0 \
+    libserial-dev \
+    terminator \
+    ipython \
+    byobu \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+    
+#RUN useradd -m docker 
+    
+RUN apt-get update && apt-get install -y nano
+
+RUN apt-get update && apt-get install -y kdevelop 
+
+#RUN curl -ssL http://get.gazebosim.org | sh
+RUN apt-get update && apt-get -y install ros-kinetic-gazebo-ros-pkgs ros-kinetic-gazebo-ros-control
+
+#add user to docker
+# create user "ross" add to sudo group and change password to "ross"
+RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
+        chpasswd && adduser ross sudo && \
+        adduser ross root
+
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers     
+
+#RUN mv /root/ros2-ws /home/ross/ros2-ws && chown -R 1000:1000 /home/ross/ros2-ws
+
+#use "ross" user from here
+USER ross 
+#RUN echo 'echo "starting ross dev environment" \nsource /home/ross/ros2-ws/local_setup.bash' >> ~/.bashrc 
+#RUN echo 'exec "$@"' >> ~/.bashrc 
+
+#USER root
+
+#setting ros2 environment variables
+#RUN echo '#!/bin/bash \nset -e   \
+#        \nsource /home/ross/ros2-ws/local_setup.bash \
+#        #\nsource $PWD/install/setup.bash \
+#        \nexec "$@"'\
+#    >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh  
+    
+    
+WORKDIR /home/ross
+
+#USER root
+
+CMD ["/bin/bash"]

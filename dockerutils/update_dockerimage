@@ -1,0 +1,20 @@
+#/bin/bash 
+
+#systemctl restart docker  #in case docker has no internet
+#if no internet connection:   systemctl restart docker
+
+#clean all containers:
+#docker stop $(docker ps -a -q)
+#docker rm $(docker ps -a -q)
+
+#in der TUB:
+#
+#systemctl stop docker
+#sudo dockerd --dns 192.168.0.1 &
+
+#docker login gitlab.tubit.tu-berlin.de
+
+docker build -f Dockerfile.ros -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:ros2beta1 .
+#docker build --no-cache -f Dockerfile.iboss -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop .
+#docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop .
+docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:develop .

@@ -17,9 +17,9 @@ echo "found DNS: $DNS"
 
 #docker inspect dockerdev  #to get information about the container
 #docker inspect --format="{{ .State.Status }}" dockerdev
-if [[ "$(docker inspect --format="{{ .State.Status }}" dockerdev 2> /dev/null)" == "exited" ]]; then
+if [[ "$(docker inspect --format="{{ .State.Status }}" ros1dockerdev 2> /dev/null)" == "exited" ]]; then
   echo "reuse last docker container!!"
-  docker start -i dockerdev
+  docker start -i ros1dockerdev
   #docker attach dockerdev
 else
   echo "create new container!!"
@@ -29,7 +29,7 @@ else
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --dns $DNS -it \
-    --name ros1roverbuild gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:ros1develop /bin/bash -c "byobu"
+    --name ros1dockerdev gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:ros1develop /bin/bash -c "byobu"
   
   if [ $? -eq 125 ]
   then
