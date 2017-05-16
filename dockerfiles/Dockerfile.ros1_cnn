@@ -1,0 +1,97 @@
+FROM ros:kinetic
+
+RUN apt-get update && apt-get install -y \
+    ros-kinetic-desktop-full \
+    ros-kinetic-moveit* \
+    ros-kinetic-move-base* \
+    ros-kinetic-frontier-exploration \
+    libserial0 \
+    libserial-dev \
+    terminator \
+    ipython \
+    byobu \
+    vim \
+    build-essential \
+    cmake \
+    git \
+    wget \
+    libatlas-base-dev \
+    libboost-all-dev \
+    libgflags-dev \
+    libgoogle-glog-dev \
+    libhdf5-serial-dev \
+    libleveldb-dev \
+    liblmdb-dev \
+    libopencv-dev \
+    libprotobuf-dev \
+    libsnappy-dev \
+    protobuf-compiler \
+    python-dev \
+    python-numpy \
+    python-pip \
+    python-setuptools \
+    python-tk \
+    python-opencv \
+    python-scipy \
+    && rm -rf /var/lib/apt/lists/*
+
+#RUN useradd -m docker
+
+ENV CAFFE=/opt/caffe
+WORKDIR $CAFFE
+
+# FIXME: use ARG instead of ENV once DockerHub supports this
+# https://github.com/docker/hub-feedback/issues/460
+ENV CLONE_TAG=1.0
+
+RUN git clone -b ${CLONE_TAG} --depth 1 https://github.com/BVLC/caffe.git . && \
+    pip install --upgrade pip && \
+    cd python && for req in $(cat requirements.txt) pydot; do pip install $req; done && cd .. && \
+    mkdir build && cd build && \
+    cmake -DCPU_ONLY=1 .. && \
+    make -j"$(nproc)"
+
+ENV PYCAFFE $CAFFE/python
+ENV PYTHONPATH $PYCAFFE:$PYTHONPATH
+ENV PATH $CAFFE/build/tools:$PYCAFFE:$PATH
+RUN echo "$CAFFE/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
+
+WORKDIR /workspace
+
+RUN apt-get update && apt-get install -y nano
+
+RUN apt-get update && apt-get install -y kdevelop
+
+#RUN curl -ssL http://get.gazebosim.org | sh
+RUN apt-get update && apt-get -y install ros-kinetic-gazebo-ros-pkgs ros-kinetic-gazebo-ros-control
+
+#add user to docker
+# create user "ross" add to sudo group and change password to "ross"
+RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
+        chpasswd && adduser ross sudo && \
+        adduser ross root
+
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+#RUN mv /root/ros2-ws /home/ross/ros2-ws && chown -R 1000:1000 /home/ross/ros2-ws
+
+#use "ross" user from here
+USER ross
+#RUN echo 'echo "starting ross dev environment" \nsource /home/ross/ros2-ws/local_setup.bash' >> ~/.bashrc
+#RUN echo 'exec "$@"' >> ~/.bashrc
+
+#USER root
+
+#setting ros2 environment variables
+#RUN echo '#!/bin/bash \nset -e   \
+#        \nsource /home/ross/ros2-ws/local_setup.bash \
+#        #\nsource $PWD/install/setup.bash \
+#        \nexec "$@"'\
+#    >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh
+
+
+WORKDIR /home/ross
+
+#USER root
+
+CMD ["/bin/bash"]
