@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     
 #RUN useradd -m docker 
     
-RUN apt-get update && apt-get install -y nano
+RUN apt-get update && apt-get install -y sudo nano
 
 RUN apt-get update && apt-get install -y kdevelop 
 

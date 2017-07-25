@@ -22,12 +22,29 @@ if [[ "$(docker inspect --format="{{ .State.Status }}" dockerdev 2> /dev/null)" 
   docker start -i dockerdev
   #docker attach dockerdev
 else
+
+#enable xserver:  http://wiki.ros.org/docker/Tutorials/GUI
   echo "create new container!!"
-  docker run --privileged -v "$PWD":"$WS" -w "$WS" --dns $DNS -it --name dockerdev gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop /bin/bash -c "byobu"
+  docker run --privileged \
+            --network=host -v "$PWD":"$WS" -w "$WS" \
+            --env="DISPLAY" \
+            --env="QT_X11_NO_MITSHM=1" \
+            --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+            --dns $DNS -it --name dockerdev \
+            gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:develop \
+            -c "byobu"
+            
   if [ $? -eq 125 ]
   then
     echo "dockerdev already running, creating new image...!"
-    docker run --privileged -v "$PWD":"$WS" -w "$WS" --dns $DNS -it gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop /bin/bash -c "byobu"
+    docker run --privileged \
+                --network=host -v "$PWD":"$WS" -w "$WS" \
+                --env="DISPLAY" \
+                --env="QT_X11_NO_MITSHM=1" \
+                --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+                --dns $DNS -it \
+                gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:develop \
+                -c "byobu"
   fi
 fi
 

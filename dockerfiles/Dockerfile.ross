@@ -16,6 +16,7 @@ RUN pip3 install --upgrade pip
 RUN pip3 install pyephem #"old" version of skyfield ()
 RUN pip3 install skyfield #jplephem #maybe required if new measurements from jpl are to be used
 
+RUN apt install -y python3-pandas
 RUN apt install -y graphviz graphviz-dev doxygen doxypy inkscape doxygen-gui #doxygen-latex  this last one takes *a lot of* time 
 
 RUN apt -y install sudo nano
@@ -26,6 +27,7 @@ RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
         chpasswd && adduser ross sudo && \
         adduser ross root
 
+#add user to sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers        
         
 #RUN chmod a+rwx /ros2_entrypoint.sh
