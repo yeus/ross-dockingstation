@@ -1,0 +1,83 @@
+FROM ubuntu:xenial
+MAINTAINER Philipp Wuestenberg 
+
+RUN locale-gen en_US.UTF-8 
+ENV LANG en_US.UTF-8
+
+RUN apt-get update && apt-get install -y lsb
+# setup keys 
+RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116 
+
+# setup sources.list 
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list' 
+
+
+# OSRF Repo Setup ############################################################## 
+# setup keys 
+RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys D2486D2DD83DB69272AFE98867170598AF249743 
+
+# setup sources.list 
+RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-latest.list'
+
+
+RUN apt-get update && apt-get install -q -y \
+    libopencv-core2.4v5 \
+    libhighgui2.4 \
+    libopencv-imgproc2.4v5 \
+    wget 
+    
+
+RUN cd ~ && wget https://github.com/ros2/ros2/releases/download/release-beta1/ros2-beta1-package-linux-fastrtps.tar.bz2 
+
+#RUN mkdir -p ~/ros2_ws && cd ~/ros2_ws && tar xf ~/ros2-beta1-package-linux-fastrtps.tar.bz2
+
+RUN cd ~ && tar xf ~/ros2-beta1-package-linux-fastrtps.tar.bz2 && mv ~/ros2-linux ~/ros2-ws
+
+#RUN source ~/ros2_install/ros2-linux/setup.bash
+
+RUN apt-get update && apt-get install -q -y \ 
+    build-essential \ 
+    cmake \ 
+    cppcheck \ 
+    git \ 
+    libopencv-dev \ 
+    libopensplice64 \ 
+    python-empy \ 
+    python3-empy \ 
+    python3-nose \ 
+    python3-pip \ 
+    python3-setuptools \ 
+    python3-vcstool \ 
+    wget \ 
+    clang-format \ 
+    pydocstyle \ 
+    pyflakes \ 
+    python3-coverage \ 
+    python3-mock \ 
+    python3-pep8 \ 
+    uncrustify \ 
+    libboost-chrono-dev \ 
+    libboost-date-time-dev \ 
+    libboost-program-options-dev \ 
+    libboost-regex-dev \ 
+    libboost-system-dev \ 
+    libboost-thread-dev \ 
+    libpoco-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN rm -rf ~/ros2-beta1-package-linux-fastrtps.tar.bz2
+
+RUN pip3 install -U \
+    setuptools
+  
+# setup entrypoint
+#COPY ./ros2_entrypoint.sh /
+#RUN echo "source ~/ros2-ws/setup.bash" >> ~/.bashrc
+#ENTRYPOINT ["/ros2_entrypoint.sh"]
+
+RUN apt update && apt install joe
+
+RUN echo '#!/bin/bash \nset -e \nsource ~/ros2-ws/local_setup.bash \nexec "$@"' >> /ros2_entrypoint.sh && chmod 775 /ros2_entrypoint.sh
+ENTRYPOINT ["/ros2_entrypoint.sh"]
+# RUN touch "~/Philipp.md"
+CMD ["bash"]

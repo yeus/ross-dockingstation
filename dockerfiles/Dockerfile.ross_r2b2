@@ -2,7 +2,7 @@
 # with some basic applications
 
 
-FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:ros2beta1
+FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2beta2:clean
 
 MAINTAINER Philipp Wuestenberg version: 0.2
 
@@ -38,7 +38,9 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #RUN sudo chmod -R a+rwx /root/ros-ws/  #is this OK, security-wise?
 #CMD chown -R 1000:1000 /root/ros2-ws/
 
-RUN mv /root/ros2-ws /home/ross/ros2-ws && chown -R 1000:1000 /home/ross/ros2-ws
+#RUN mv /root/ros2-ws /home/ross/ros2-ws && chown -R 1000:1000 /home/ross/ros2-ws
+
+# RUN chown -R 1000:1000 /opt/ros/
 
 #graphical environment libraries
 RUN apt-get install -y pyqt5-dev python3-pyqt5
@@ -48,14 +50,22 @@ USER ross
 #RUN echo 'echo "starting ross dev environment" \nsource /home/ross/ros2-ws/local_setup.bash' >> ~/.bashrc 
 #RUN echo 'exec "$@"' >> ~/.bashrc 
 
-#USER root
+#USER root -R 1000:1000 /home/ross
+
+# RUN chmod -fR a+rwx /home/ross
 
 #setting ros2 environment variables
 #adding a script "ros2_entrypoint.sh" to the directory and as entrypoint
-RUN echo '#!/bin/bash \nset -e   \
-        \nsource /home/ross/ros2-ws/local_setup.bash \
-        #\nsource $PWD/install/setup.bash \
-        \nexec "$@"' >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh
+
+RUN echo '#!/bin/bash \nset -e \
+    \nsource /opt/ros/r2b2/setup.bash \ 
+    \nsource /opt/ros/r2b2/share/ros2cli/environment/ros2-argcomplete.bash \
+    \nexec "$@"' >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh
+
+#RUN echo '#!/bin/bash \nset -e  \
+ #       \nsource /opt/ros/r2b2/setup.bash \
+  #      #\nsource $PWD/install/setup.bash \
+   #     \nexec "$@"' >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh
 
 #setting ross environment variables
 #RUN echo 'echo "starting ross environment" \nsource /home/ross/install/local_setup.bash' >> ~/.bashrc     
@@ -63,9 +73,12 @@ RUN echo '#!/bin/bash \nset -e   \
     
 WORKDIR /home/ross
 
+# RUN byobu-enable
+
 #USER root
 
 ENTRYPOINT ["/home/ross/ros2_entrypoint.sh"]
+#ENTRYPOINT ["/ros2_entrypoint.sh"]
 #ENTRYPOINT /bin/bash
 #ENTRYPOINT su ross -c "/bin/bash"
 #CMD su ross -c "/home/ross/ros2_entrypoint.sh"
