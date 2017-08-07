@@ -12,7 +12,10 @@
 #systemctl stop docker
 #sudo dockerd --dns 192.168.0.1 &
 
-#docker login gitlab.tubit.tu-berlin.de
+#einloggen in der coker rgistry:
+#docker login gitlab-registry.tubit.tu-berlin.de
+#docker build -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/image .
+#docker push gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/image
 
 #docker build -f Dockerfile.ros2 -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station:ros2beta1 .
 #docker build --no-cache -f Dockerfile.iboss -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross:develop .
