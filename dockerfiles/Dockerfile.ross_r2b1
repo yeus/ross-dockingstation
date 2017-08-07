@@ -11,10 +11,7 @@ RUN apt install -y iputils-ping openssh-server net-tools nmap vim byobu python3-
                     ipython3 libeigen3-dev
                     
 RUN pip3 install --upgrade pip
-RUN pip3 install sgp4 \
-                 skyfield \
-                 jplephem \
-                 pandas \
+RUN pip3 install sgp4 skyfield jplephem pandas 
 
 RUN apt install -y graphviz graphviz-dev doxygen doxypy inkscape sudo nano
 

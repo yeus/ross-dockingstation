@@ -21,6 +21,7 @@ cd ../dockerfiles
 
 docker build -f Dockerfile.ros2_beta1 -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2beta1:clean .
 docker build -f Dockerfile.ross_r2b1 -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2beta1:develop .
+docker build -f Dockerfile.ross_compiled -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2beta1:compiled .
 
 #docker build -f Dockerfile.ros2_beta2 -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2beta2:clean .
 #docker build -f Dockerfile.ross_r2b2 -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2beta2:develop .
