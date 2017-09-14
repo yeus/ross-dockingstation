@@ -45,6 +45,9 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #graphical environment libraries
 RUN apt-get install -y pyqt5-dev python3-pyqt5
 
+
+RUN apt-get install -y qt5-default libsqlite3-dev libtinyxml2-dev
+
 #use "ross" user from here
 USER ross 
 #RUN echo 'echo "starting ross dev environment" \nsource /home/ross/ros2-ws/local_setup.bash' >> ~/.bashrc 

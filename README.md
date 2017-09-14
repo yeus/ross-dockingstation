@@ -3,10 +3,14 @@ Repository to use Docker as ROSS development Tool
 
 Within this Repository scrips and Dockerfiles will be stored to work with Docker.
 
+# install docker
+To install docker follow the instructions from the docker website:
+
+https://docs.docker.com/engine/installation/
 
 # dockerutils
 
-copy the files in your project and adapt them to your needs theay can be used to
+copy the files in your project and adapt them to your needs they can be used to
 start the ros images:
 
 * docker_ros1_start_template
