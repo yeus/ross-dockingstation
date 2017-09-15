@@ -42,18 +42,20 @@ RUN sh -c 'echo "deb http://repo.ros2.org/ubuntu/main xenial main" > /etc/apt/so
 
 RUN apt update 
 
-RUN apt install -y `apt list ros-r2b2-* 2> /dev/null | grep "/" | awk -F/ '{print $1}' | grep -v -e ros-r2b2-ros1-bridge -e ros-r2b2-turtlebot2- | tr "\n" " "` 
+RUN apt install -y `apt list ros-r2b3-* 2> /dev/null | grep "/" | awk -F/ '{print $1}' | grep -v -e ros-r2b3-ros1-bridge -e ros-r2b3-turtlebot2- | tr "\n" " "`
 
-#RUN source /opt/ros/r2b2/setup.bash
+RUN ls /opt/
 
-#RUN source /opt/ros/r2b2/share/ros2cli/environment/ros2-argcomplete.bash
+#RUN source /opt/ros/r2b3/setup.bash
+
+#RUN source /opt/ros/r2b3/share/ros2cli/environment/ros2-argcomplete.bash
 
 RUN pip3 install -U \
     setuptools
     
 RUN apt update && apt install joe
 
-RUN echo '#!/bin/bash \nset -e \nsource /opt/ros/r2b2/setup.bash \nsource /opt/ros/r2b2/share/ros2cli/environment/ros2-argcomplete.bash \nexec "$@"' >> /ros2_entrypoint.sh && chmod 775 /ros2_entrypoint.sh
+RUN echo '#!/bin/bash \nset -e \nsource /opt/ros/r2b3/setup.bash \nsource /opt/ros/r2b3/share/ros2cli/environment/ros2-argcomplete.bash \nexec "$@"' >> /ros2_entrypoint.sh && chmod 775 /ros2_entrypoint.sh
 
 ENTRYPOINT ["/ros2_entrypoint.sh"]
 CMD ["bash"]
