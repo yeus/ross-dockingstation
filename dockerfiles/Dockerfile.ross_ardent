@@ -2,9 +2,9 @@
 # with some basic applications
 
 
-FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2ardent:clean
+FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:clean
 
-MAINTAINER Philipp Wuestenberg version: 0.2
+MAINTAINER Thomas Meschede
 
 RUN apt update
 RUN apt install -y iputils-ping openssh-server net-tools nmap vim byobu python3-numpy
@@ -61,14 +61,9 @@ USER ross
 #adding a script "ros2_entrypoint.sh" to the directory and as entrypoint
 
 RUN echo '#!/bin/bash \nset -e \
-    \nsource /opt/ros/ardent/setup.bash \ 
-    \nsource /opt/ros/ardent/share/ros2cli/environment/ros2-argcomplete.bash \
+    \nsource /opt/ros/$ROS_DISTRO/setup.bash \ 
+    \nsource /opt/ros/$ROS_DISTRO/share/ros2cli/environment/ros2-argcomplete.bash \
     \nexec "$@"' >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh
-
-#RUN echo '#!/bin/bash \nset -e  \
- #       \nsource /opt/ros/r2b3/setup.bash\
-  #      #\nsource $PWD/install/setup.bash \
-   #     \nexec "$@"' >> /home/ross/ros2_entrypoint.sh && chmod u+rwx /home/ross/ros2_entrypoint.sh
 
 #setting ross environment variables
 #RUN echo 'echo "starting ross environment" \nsource /home/ross/install/local_setup.bash' >> ~/.bashrc     
