@@ -1,34 +1,30 @@
 # creating docker image for ros2
 # with some basic applications
 
-
 FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:clean
 
 MAINTAINER Thomas Meschede
 
 RUN apt update
-RUN apt install -y iputils-ping openssh-server net-tools nmap vim byobu python3-numpy
+RUN apt install -y \
+    iputils-ping openssh-server net-tools nmap vim byobu python3-numpy \
+    ipython3 libeigen3-dev \
+    python3-pandas python3-mysqldb \
+    graphviz graphviz-dev doxygen doxypy inkscape doxygen-gui \
+    sudo nano \
+    pyqt5-dev python3-pyqt5 qt5-default libsqlite3-dev libtinyxml2-dev
+    
+    
 
-RUN apt install -y ipython3 libeigen3-dev
-RUN pip3 install sgp4
-RUN pip3 install --upgrade pip
-#TODO:
-RUN pip3 install pyephem #"old" version of skyfield ()
-RUN pip3 install skyfield #jplephem #maybe required if new measurements from jpl are to be used
+#RUN pip3 install --upgrade pip
+RUN pip3 install sgp4 \
+    skyfield
 
-RUN apt install -y python3-pandas python3-mysqldb
-RUN apt install -y graphviz graphviz-dev doxygen doxypy inkscape doxygen-gui #doxygen-latex  this last one takes *a lot of* time 
-
-RUN apt -y install sudo nano
-
-#add user to docker
 # create user "ross" add to sudo group and change password to "ross"
 RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
         chpasswd && adduser ross sudo && \
-        adduser ross root
-
-#add user to sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers        
+        adduser ross root && \
+        echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
         
 #RUN chmod a+rwx /ros2_entrypoint.sh
 #RUN chmod -R a+rwx /root  #is this OK, security-wise?
@@ -37,17 +33,10 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 #RUN chmod -R a+rwx /root/ros2-ws
 #RUN sudo chmod -R a+rwx /root/ros-ws/  #is this OK, security-wise?
 #CMD chown -R 1000:1000 /root/ros2-ws/
-
 #RUN mv /root/ros2-ws /home/ross/ros2-ws && chown -R 1000:1000 /home/ross/ros2-ws
 
-# RUN chown -R 1000:1000 /opt/ros/
-
-#graphical environment libraries
-RUN apt-get install -y pyqt5-dev python3-pyqt5
-
-
-RUN apt-get install -y qt5-default libsqlite3-dev libtinyxml2-dev
-
+#RUN chown -R 1000:1000 /opt/ros/
+    
 #use "ross" user from here
 USER ross 
 #RUN echo 'echo "starting ross dev environment" \nsource /home/ross/ros2-ws/local_setup.bash' >> ~/.bashrc 
@@ -67,7 +56,7 @@ RUN echo '#!/bin/bash \nset -e \
 
 #setting ross environment variables
 #RUN echo 'echo "starting ross environment" \nsource /home/ross/install/local_setup.bash' >> ~/.bashrc     
-    
+
     
 WORKDIR /home/ross
 
