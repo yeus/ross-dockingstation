@@ -19,8 +19,8 @@
 
 cd ../dockerfiles
 
-docker build -f Dockerfile.ros2_ardent -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:clean .
-docker build -f Dockerfile.ross_ardent -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:develop .
+docker build -f Dockerfile.ros2_source -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:clean .
+docker build -f Dockerfile.ros2_source -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:develop .
 #docker build -f Dockerfile.ross_compiled -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:compiled .
 
 
