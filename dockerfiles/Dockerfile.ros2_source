@@ -1,10 +1,17 @@
 FROM ubuntu:xenial
+#FROM ubuntu:buinic
 MAINTAINER Thomas Meschede
 
-RUN apt-get clean && apt-get -y update && apt-get install -y locales
+#according to this instlalation process https://github.com/ros2/ros2/wiki/Linux-Development-Setup
 
-RUN locale-gen en_US.UTF-8 
-ENV LANG en_US.UTF-8
+#RUN apt-get clean && apt-get -y update && apt-get install -y locales
+
+#RUN locale-gen en_US.UTF-8 
+#ENV LANG en_US.UTF-8
+
+RUN apt update && apt install -y curl lsb-release
+RUN curl http://repo.ros2.org/repos.key | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64,arm64] http://repo.ros2.org/ubuntu/main `lsb_release -cs` main" > /etc/apt/sources.list.d/ros2-latest.list'
 
 RUN apt update && apt install -y \
     build-essential \
@@ -15,13 +22,12 @@ RUN apt update && apt install -y \
     python3-vcstool \
     wget
 
-#\
-#    python3-vcstool
+#RUN pip3 install python3-vcstool  python3-colcon-common-extensions
 
 
 # Install argcomplete for command-line tab completion from the ROS2 tools.
 # Install from pip rather than from apt-get because of a bug in the Ubuntu 16.04 version of argcomplete:
-RUN pip3 install \
+RUN pip3 install -U \
     argcomplete\
     flake8 \ 
     flake8-blind-except \
@@ -42,22 +48,19 @@ RUN pip3 install \
 
 RUN apt install --no-install-recommends -y \
     libasio-dev \
-    libtinyxml12-dev    
+    libtinyxml2-dev    
+
+COPY install_ros2_source.sh ros2.repos /tmp/
+RUN chmod a+x /tmp/install_ros2_source.sh && ./tmp/install_ros2_source.sh
     
-ENV ROS_DISTRO ardent
-#RUN export ROS_DISTRO=bouncy  # or ardent
+    
+#ENV ROS_DISTRO ardent
 
-COPY install_ros2_source.sh /tmp/
-RUN chmod a+x /tmp/install_ros2_source.sh
-RUN /tmp/install_ros2_source.sh
-
-#RUN ls /opt/
-#RUN source /opt/ros/$ROS_DISTRO/setup.bash
-#RUN source /opt/ros/$ROS_DISTRO/share/ros2cli/environment/ros2-argcomplete.bash
+ENV ROSDIR /root/ros2_ws/
 
 RUN echo '#!/bin/bash \nset -e \
-    \nsource /opt/ros/$ROS_DISTRO/setup.bash \
-    \nsource /opt/ros/$ROS_DISTRO/share/ros2cli/environment/ros2-argcomplete.bash \
+    \nsource $ROSDIR/install/setup.bash \
+    \nsource $ROSDIR/install/share/ros2cli/environment/ros2-argcomplete.bash \
     \nexec "$@"' >> /ros2_entrypoint.sh && chmod 775 /ros2_entrypoint.sh
 
 ENTRYPOINT ["/ros2_entrypoint.sh"]
