@@ -20,8 +20,16 @@ RUN apt update && apt install -y \
     python3-pip \
     python-rosdep \
     python3-vcstool \
-    wget
-
+    wget \
+    #new inputs
+    cmake \
+    libeigen3-dev
+    
+    #new inputs
+    # cmake libpoco-dev libpocofoundation9v5 libpocofoundation9v5-dbg libtinyxml2-dev libeigen3-dev                 
+    
+    
+    
 #RUN pip3 install python3-vcstool  python3-colcon-common-extensions
 
 
@@ -59,9 +67,9 @@ RUN chmod a+x /tmp/install_ros2_source.sh && ./tmp/install_ros2_source.sh
 ENV ROSDIR /root/ros2_ws/
 
 RUN echo '#!/bin/bash \nset -e \
-    \nsource $ROSDIR/setup.bash \
+    \nsource $ROSDIR/install/setup.bash \
     \nsource $ROSDIR/share/ros2cli/environment/ros2-argcomplete.bash \
     \nexec "$@"' >> /ros2_entrypoint.sh && chmod 775 /ros2_entrypoint.sh
 
-ENTRYPOINT ["/ros2_entrypoint.sh"]
+#ENTRYPOINT ["/ros2_entrypoint.sh"]
 CMD ["bash"]
