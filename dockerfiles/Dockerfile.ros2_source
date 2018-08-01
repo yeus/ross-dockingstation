@@ -25,17 +25,18 @@ RUN apt update && apt install -y \
     cmake \
     libeigen3-dev
     
-    #new inputs
-    # cmake libpoco-dev libpocofoundation9v5 libpocofoundation9v5-dbg libtinyxml2-dev libeigen3-dev                 
+
+# new inputs
+# cmake libpoco-dev libpocofoundation9v5 libpocofoundation9v5-dbg libtinyxml2-dev libeigen3-dev                 
     
     
     
-#RUN pip3 install python3-vcstool  python3-colcon-common-extensions
+# RUN pip3 install python3-vcstool  python3-colcon-common-extensions
 
 
 # Install argcomplete for command-line tab completion from the ROS2 tools.
 # Install from pip rather than from apt-get because of a bug in the Ubuntu 16.04 version of argcomplete:
-RUN pip3 install -U \
+RUN pip3 install --upgrade \
     argcomplete\
     flake8 \ 
     flake8-blind-except \
@@ -54,9 +55,10 @@ RUN pip3 install -U \
     pytest-runner \
     setuptools 
 
+# install Fast-RTPS dependencies
 RUN apt install --no-install-recommends -y \
     libasio-dev \
-    libtinyxml2-dev    
+    libtinyxml2-dev
 
 COPY install_ros2_source.sh ros2.repos /tmp/
 RUN chmod a+x /tmp/install_ros2_source.sh && ./tmp/install_ros2_source.sh
