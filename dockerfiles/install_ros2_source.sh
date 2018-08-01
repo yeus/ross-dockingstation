@@ -6,9 +6,11 @@ cd ~/ros2_ws
 mv /tmp/ros2.repos ~/ros2_ws
 vcs import src < ros2.repos
 
+
 rosdep init
 rosdep update
 rosdep install --from-paths src --ignore-src --rosdistro bouncy -y --skip-keys "console_bridge fastcdr fastrtps libopensplice67 rti-connext-dds-5.3.1 urdfdom_headers"
+
 
 cd ~/ros2_ws/
 colcon build --symlink-install
