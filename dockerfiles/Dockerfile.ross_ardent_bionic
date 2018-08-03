@@ -2,8 +2,7 @@
 # with some basic applications
 
 # Image base
-#FROM ubuntu:bionic
-FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:bionic
+FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:source
 
 MAINTAINER Thomas Meschede & Juan Maria Haces Crespo
 
