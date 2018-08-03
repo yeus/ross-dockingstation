@@ -2,7 +2,7 @@
 # with some basic applications
 
 # Image base
-FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:source
+FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:sourcerepos
 
 MAINTAINER Thomas Meschede & Juan Maria Haces Crespo
 
@@ -60,12 +60,19 @@ USER ross
 ENV ROS2_WS /root/ros2_ws
 
 #This command generates the entrypoint script and, also, give rights to all users
+#RUN echo '#!/bin/bash \nset -e \
+#    \nsource $ROS2_WS/install/setup.bash \ 
+#    \nsource $ROS2_WS/install/ros2cli/share/ros2cli/environment/ros2-argcomplete.bash \
+#    \nexec "$@"' >> $ROS2_WS/ros2_entrypoint.sh \
+#    && chmod a+rwx $ROS2_WS/ros2_entrypoint.sh
+    
+#This command generates the entrypoint script and, also, give rights to all users
 RUN echo '#!/bin/bash \nset -e \
     \nsource $ROS2_WS/install/setup.bash \ 
-    \nsource $ROS2_WS/install/ros2cli/share/ros2cli/environment/ros2-argcomplete.bash \
     \nexec "$@"' >> $ROS2_WS/ros2_entrypoint.sh \
     && chmod a+rwx $ROS2_WS/ros2_entrypoint.sh
-
+    
+    
 #setting ross environment variables
 #RUN echo 'echo "starting ross environment" \nsource $ROS2_WS/install/local_setup.bash' >> ~/.bashrc     
 
@@ -76,7 +83,7 @@ WORKDIR /home/ross
 
 #USER root
 
-ENTRYPOINT ["/root/ros2_ws/ros2_entrypoint.sh"]
+#ENTRYPOINT ["/root/ros2_ws/ros2_entrypoint.sh"]
 #ENTRYPOINT ["/ros2_entrypoint.sh"]
 #ENTRYPOINT /bin/bash
 #ENTRYPOINT su ross -c "/bin/bash"

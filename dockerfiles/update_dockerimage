@@ -19,8 +19,13 @@
 
 cd ../dockerfiles
 
-docker build -f Dockerfile.ros2_source -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:source .
-docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:develop .
+#docker build -f Dockerfile.ros2_source -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:source .
+#docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:develop .
+
+docker build -f Dockerfile.ros2_source_repos -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:sourcerepos .
+#test with: docker run -it gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:sourcerepos
+#docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:develop .
+
 #docker build -f Dockerfile.ross_compiled -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:compiled .
 
 
