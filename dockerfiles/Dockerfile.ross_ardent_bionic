@@ -2,6 +2,7 @@
 # with some basic applications
 
 # Image base
+#FROM ubuntu:bionic
 FROM gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:bionic
 
 MAINTAINER Thomas Meschede & Juan Maria Haces Crespo
@@ -54,7 +55,7 @@ USER ross
 # RUN chmod -fR a+rwx /home/ross
 
 #setting ros2 environment variables
-#adding a script "ros2_source_entrypoint.sh" to the directory and as entrypoint
+#adding a script "ros2_entrypoint.sh" to the directory and as entrypoint
 
 #ENV ROSPATH /opt/ros/$ROS_DISTRO
 ENV ROS2_WS /root/ros2_ws
@@ -63,8 +64,8 @@ ENV ROS2_WS /root/ros2_ws
 RUN echo '#!/bin/bash \nset -e \
     \nsource $ROS2_WS/install/setup.bash \ 
     \nsource $ROS2_WS/install/ros2cli/share/ros2cli/environment/ros2-argcomplete.bash \
-    \nexec "$@"' >> $ROS2_WS/ros2_source_entrypoint.sh \
-    && chmod a+rwx $ROS2_WS/ros2_source_entrypoint.sh
+    \nexec "$@"' >> $ROS2_WS/ros2_entrypoint.sh \
+    && chmod a+rwx $ROS2_WS/ros2_entrypoint.sh
 
 #setting ross environment variables
 #RUN echo 'echo "starting ross environment" \nsource $ROS2_WS/install/local_setup.bash' >> ~/.bashrc     
@@ -76,7 +77,7 @@ WORKDIR /home/ross
 
 #USER root
 
-ENTRYPOINT ["/root/ros2_ws/ros2_source_entrypoint.sh"]
+ENTRYPOINT ["/root/ros2_ws/ros2_entrypoint.sh"]
 #ENTRYPOINT ["/ros2_entrypoint.sh"]
 #ENTRYPOINT /bin/bash
 #ENTRYPOINT su ross -c "/bin/bash"
