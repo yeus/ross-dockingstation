@@ -17,8 +17,6 @@
 #docker build -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/image .
 #docker push gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/image
 
-cd ../dockerfiles
-
 #docker build -f Dockerfile.ros2_source -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:source .
 #docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:develop .
 

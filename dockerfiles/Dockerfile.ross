@@ -39,8 +39,7 @@ RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
 ###CMD chown -R 1000:1000 /root/ros2_ws/          # I do not understand why there are 2 CMDs in the file. The last one is the only which will be executed.
 ###RUN mv /root/ros2-ws /home/ross/ros2_ws && 
 #RUN chown -R 1000:1000 /root/ros2_ws
-RUN chown -R ross:ross /root
-RUN chmod -R a+rwx /root/ros2_ws
+RUN chown -R ross:ross /root && chmod -R a+rx /root/ros2_ws
 
 #RUN chown -R 1000:1000 /opt/ros/
     

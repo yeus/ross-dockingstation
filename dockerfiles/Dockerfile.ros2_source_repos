@@ -99,10 +99,12 @@ ENV ROS2_WS /root/ros2_ws
 ##RUN mkdir -p $ROS2_WS/src
 ##WORKDIR $ROS2_WS
 ##RUN wget https://raw.githubusercontent.com/ros2/ros2/master/ros2.repos  && vcs import src < ros2.repos
-    
+
+ENV ROS2INSTALL install_ros2_source_repos.sh
+
 # Insert the file for the repositories, run the file to obtain them and build the ROS2 files.
-COPY install_ros2_source.sh ros2.repos /tmp/
-RUN chmod a+x /tmp/install_ros2_source.sh && ./tmp/install_ros2_source.sh; exit 0
+COPY $ROS2INSTALL ros2_iboss.repos /tmp/
+RUN chmod a+x /tmp/$ROS2INSTALL && ./tmp/$ROS2INSTALL; exit 0
 
 ### build source
 ##WORKDIR $ROS2_WS
