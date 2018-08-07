@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -q -y \
     dirmngr \
     git \
     gnupg2 \
+    libboost-system-dev \
     libasio-dev \
     libassimp-dev \
     libcurl4-openssl-dev \
