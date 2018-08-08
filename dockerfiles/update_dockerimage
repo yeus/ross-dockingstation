@@ -27,4 +27,7 @@ docker build -f Dockerfile.ross -t gitlab-registry.tubit.tu-berlin.de/ross-lead-
 #docker build -f Dockerfile.ross_compiled -t gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2_bouncy:compiled .
 
 
+#docker push gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:develop
+#docker push gitlab-registry.tubit.tu-berlin.de/ross-lead-engineers/ross-docking-station/ros2:sourcerepos
+
 #cd - #go back to original directory

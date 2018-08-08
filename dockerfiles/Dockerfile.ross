@@ -28,6 +28,9 @@ RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
         chpasswd && adduser ross sudo && \
         adduser ross root && \
         echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+#ENV ROSPATH /opt/ros/$ROS_DISTRO
+ENV ROS2_WS /root/ros2_ws        
         
 # Allow to all users to read, write and execute the files in ros2_ws
 ###RUN chmod a+rwx /ros2_source_entrypoint.sh
@@ -39,7 +42,7 @@ RUN useradd -ms /bin/bash ross && echo "ross:ross" | \
 ###CMD chown -R 1000:1000 /root/ros2_ws/          # I do not understand why there are 2 CMDs in the file. The last one is the only which will be executed.
 ###RUN mv /root/ros2-ws /home/ross/ros2_ws && 
 #RUN chown -R 1000:1000 /root/ros2_ws
-RUN chown -R ross:ross /root && chown -R 1000:1000 /root/ && chmod -R a+wrx /root/ros2_ws
+RUN chown -R ross:ross /root && chown -R 1000:1000 /root/ && chmod -R a+rwx $ROS2_WS
 
 #RUN chown -R 1000:1000 /opt/ros/
     
@@ -54,9 +57,6 @@ USER ross
 
 #setting ros2 environment variables
 #adding a script "ros2_entrypoint.sh" to the directory and as entrypoint
-
-#ENV ROSPATH /opt/ros/$ROS_DISTRO
-ENV ROS2_WS /root/ros2_ws
 
 #This command generates the entrypoint script and, also, give rights to all users
 #RUN echo '#!/bin/bash \nset -e \
@@ -82,7 +82,7 @@ WORKDIR /home/ross
 
 #USER root
 
-#ENTRYPOINT ["/root/ros2_ws/ros2_entrypoint.sh"]
+ENTRYPOINT ["$ROS2_WS/ros2_entrypoint.sh"]
 #ENTRYPOINT ["/ros2_entrypoint.sh"]
 #ENTRYPOINT /bin/bash
 #ENTRYPOINT su ross -c "/bin/bash"
