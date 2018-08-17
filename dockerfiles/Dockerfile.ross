@@ -21,6 +21,7 @@ RUN apt update && apt install -y \
 #RUN pip3 install --upgrade pip
 RUN pip3 install sgp4 \
     skyfield \
+    bitstring \
     && rm -rf /var/lib/apt/lists/*
 
 # create user "ross" add to sudo group and change password to "ross"
